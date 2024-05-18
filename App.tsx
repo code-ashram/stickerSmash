@@ -91,30 +91,35 @@ const App: FC = () => {
     <GestureHandlerRootView style={styles.container}>
       <View style={styles.imageContainer}>
         <View ref={imageRef} collapsable={false}>
-          <ImageViewer placeholderImageSource={PlaceholderImage} selectedImage={selectedImage}/>
-          {pickedEmoji && <EmojiSticker imageSize={40} stickerSource={pickedEmoji}/>}
+          <ImageViewer
+            placeholderImageSource={PlaceholderImage}
+            selectedImage={selectedImage}
+          />
+          {pickedEmoji !== null ? (
+            <EmojiSticker imageSize={40} stickerSource={pickedEmoji} />
+          ) : null}
         </View>
-
-        {showAppOptions
-          ? (<View style={styles.optionsContainer}>
-            <View style={styles.optionsRow}>
-              <IconButton icon="refresh" label="Reset" onPress={onReset}/>
-              <CircleButton onPress={onAddSticker}/>
-              <IconButton icon="save-alt" label="Save" onPress={onSaveImageAsync}/>
-            </View>
-          </View>)
-
-          : (<View style={styles.footerContainer}>
-            <Button label="Choose a photo" theme={'primary'} onPress={pickImageAsync}/>
-            <Button label="Use this photo" onPress={() => setShowAppOptions(true)}/>
-          </View>)
-        }
-
-        <EmojiPicker isVisible={isModalVisible} onClose={onModalClose}>
-          <EmojiList onSelect={setPickedEmoji} onCloseModal={onModalClose}/>
-        </EmojiPicker>
-        <StatusBar style="auto"/>
       </View>
+
+      {showAppOptions ? (
+        <View style={styles.optionsContainer}>
+          <View style={styles.optionsRow}>
+            <IconButton icon="refresh" label="Reset" onPress={onReset} />
+            <CircleButton onPress={onAddSticker} />
+            <IconButton icon="save-alt" label="Save" onPress={onSaveImageAsync} />
+          </View>
+        </View>
+      ) : (
+        <View style={styles.footerContainer}>
+          <Button theme="primary" label="Choose a photo" onPress={pickImageAsync} />
+          <Button label="Use this photo" onPress={() => setShowAppOptions(true)} />
+        </View>
+      )}
+
+      <EmojiPicker isVisible={isModalVisible} onClose={onModalClose}>
+        <EmojiList onSelect={setPickedEmoji} onCloseModal={onModalClose} />
+      </EmojiPicker>
+      <StatusBar style="auto" />
     </GestureHandlerRootView>
   )
 }
@@ -123,11 +128,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#25292e',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   imageContainer: {
     flex: 1,
-    paddingTop: 58
+    paddingTop: 58,
   },
   footerContainer: {
     flex: 1 / 3,
